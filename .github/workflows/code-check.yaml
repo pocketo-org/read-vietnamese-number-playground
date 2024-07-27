@@ -17,6 +17,11 @@ jobs:
         with:
           node-version: "20.16.0" # Latest LTS version
           cache: "npm"
+      - name: Create .env files
+        run: |
+          cat > .env.local << EOF
+          VITE_BUILD_NUMBER = ${GITHUB_SHA::7}
+          EOF
       - name: Install dependencies
         run: npm ci
       - name: Check code style and linting
