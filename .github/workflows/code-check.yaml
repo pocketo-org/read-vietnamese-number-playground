@@ -1,0 +1,32 @@
+name: Code check
+
+on:
+  push:
+    branches: ["**"]
+    tags-ignore: ["**"]
+
+jobs:
+  npm-check:
+    name: NPM check
+    runs-on: ubuntu-22.04 # Latest LTS version
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version: "20.16.0" # Latest LTS version
+          cache: "npm"
+      - name: Create .env files
+        run: |
+          cat > .env.local << EOF
+          VITE_BUILD_NUMBER = ${GITHUB_SHA::7}
+          EOF
+      - name: Install dependencies
+        run: npm ci
+      - name: Check code style and linting
+        run: npm run lint --if-present
+      - name: Run build
+        run: npm run build --if-present
+      - name: Run test
+        run: npm run test --if-present
