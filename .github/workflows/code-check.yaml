@@ -22,7 +22,6 @@ jobs:
           cat > .env.local << EOF
           VITE_BUILD_NUMBER = ${GITHUB_SHA::7}
           EOF
-          cat .env.local
       - name: Install dependencies
         run: npm ci
       - name: Check code style and linting
